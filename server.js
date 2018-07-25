@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const pg = require('pg');
 const PORT = process.env.PORT;
 const conString = process.env.DATABASE_URL;
@@ -12,5 +13,16 @@ client.on('error', error => {
   console.error(error);
 });
 
-app.get('/', (req, res) => res.send('Testing 1, 2, 3'));
+app.use(cors());
+app.get('/api/v1/books', (req, res) => {
+  let SQL = `
+    SELECT book_id, title, author, image_url 
+    FROM books;
+  `;
+
+  client.query(SQL)
+    .then(result => res.send(result.rows))
+    .catch(console.error);
+})
+
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
