@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const pg = require('pg');
 const PORT = process.env.PORT;
 const conString = process.env.DATABASE_URL;
 const client = new pg.Client(conString);
