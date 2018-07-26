@@ -15,7 +15,8 @@ client.on('error', error => {
 
 app.use(cors());
 
-app.get('/api/v1/books:id', (request, response) => {
+// receiving id value (Book.fetchOne)
+app.get('/api/v1/books/:id', (request, response) => {
   let SQL = `
     SELECT book_id, title, author, image_url 
     FROM books
@@ -24,7 +25,7 @@ app.get('/api/v1/books:id', (request, response) => {
     request.body.book_id
   ]
 
-  client.query(SQL)
+  client.query(SQL, values)
     .then(result => response.send(result.row))
     .catch(console.error);
 });
