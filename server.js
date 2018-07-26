@@ -14,15 +14,30 @@ client.on('error', error => {
 });
 
 app.use(cors());
-app.get('/api/v1/books', (req, res) => {
+
+app.get('/api/v1/books:id', (request, response) => {
+  let SQL = `
+    SELECT book_id, title, author, image_url 
+    FROM books
+    WHERE book_id = $1;`;
+  let values = [
+    request.body.book_id
+  ]
+
+  client.query(SQL)
+    .then(result => response.send(result.row))
+    .catch(console.error);
+});
+
+app.get('/api/v1/books', (request, response) => {
   let SQL = `
     SELECT book_id, title, author, image_url 
     FROM books;
   `;
 
   client.query(SQL)
-    .then(result => res.send(result.rows))
+    .then(result => response.send(result.rows))
     .catch(console.error);
-})
+});
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
