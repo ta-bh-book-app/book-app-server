@@ -41,4 +41,17 @@ app.get('/api/v1/books', (request, response) => {
     .catch(console.error);
 });
 
+app.post('api/v1/books', (request, response) => {
+  let {title, author, isbn, image_url, description} = request.body;
+
+  let SQL = `INSERT INTO books(title, author, isbn, image_url, description) 
+             VALUES($1, $2, $3, $4, $5);`;
+
+  let values = [title, author, isbn, image_url, description];
+
+  client.query(SQL, values)
+      .then(response.sendStatus(201))
+      .catch(console.error);
+});
+
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
