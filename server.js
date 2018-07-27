@@ -22,9 +22,8 @@ app.get('/api/v1/books/:id', (request, response) => {
     FROM books
     WHERE book_id = $1;`;
   let values = [
-    request.body.book_id
+    request.params.book_id
   ]
-
   client.query(SQL, values)
     .then(result => response.send(result.row))
     .catch(console.error);
