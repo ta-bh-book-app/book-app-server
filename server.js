@@ -14,15 +14,43 @@ client.on('error', error => {
 });
 
 app.use(cors());
-app.get('/api/v1/books', (req, res) => {
+
+// receiving id value (Book.fetchOne)
+app.get('/api/v1/books/:id', (request, response) => {
+  let SQL = `
+    SELECT book_id, title, author, image_url 
+    FROM books
+    WHERE book_id = $1;`;
+  let values = [
+    request.params.book_id
+  ]
+  client.query(SQL, values)
+    .then(result => response.send(result.row))
+    .catch(console.error);
+});
+
+app.get('/api/v1/books', (request, response) => {
   let SQL = `
     SELECT book_id, title, author, image_url 
     FROM books;
   `;
 
   client.query(SQL)
-    .then(result => res.send(result.rows))
+    .then(result => response.send(result.rows))
     .catch(console.error);
-})
+});
+
+app.post('api/v1/books', (request, response) => {
+  let {title, author, isbn, image_url, description} = request.body;
+
+  let SQL = `INSERT INTO books(title, author, isbn, image_url, description) 
+             VALUES($1, $2, $3, $4, $5);`;
+
+  let values = [title, author, isbn, image_url, description];
+
+  client.query(SQL, values)
+      .then(response.sendStatus(201))
+      .catch(console.error);
+});
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
