@@ -41,7 +41,7 @@ app.get('/api/v1/books', (request, response) => {
     .catch(console.error);
 });
 
-app.post('api/v1/books', (request, response) => {
+app.post('/api/v1/books', express.urlencoded(), (request, response) => {
   let {title, author, isbn, image_url, description} = request.body;
 
   let SQL = `INSERT INTO books(title, author, isbn, image_url, description) 
@@ -50,7 +50,8 @@ app.post('api/v1/books', (request, response) => {
   let values = [title, author, isbn, image_url, description];
 
   client.query(SQL, values)
-      .then(response.sendStatus(201))
+      // Brandon - added '() => '
+      .then(() => response.sendStatus(201))
       .catch(console.error);
 });
 
