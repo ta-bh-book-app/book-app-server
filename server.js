@@ -41,7 +41,7 @@ app.get('/api/v1/books', (request, response) => {
     .catch(console.error);
 });
 
-app.post('/api/v1/books', express.urlencoded(), (request, response) => {
+app.post('/api/v1/books', /*express.urlencoded(),*/ (request, response) => {
   let {title, author, isbn, image_url, description} = request.body;
 
   let SQL = `INSERT INTO books(title, author, isbn, image_url, description) 
