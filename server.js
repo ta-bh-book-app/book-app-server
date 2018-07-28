@@ -15,17 +15,18 @@ client.on('error', error => {
 
 app.use(cors());
 
+// TODO: The below query is not returning anything
 // receiving id value (Book.fetchOne)
 app.get('/api/v1/books/:id', (request, response) => {
   let SQL = `
-    SELECT book_id, title, author, image_url 
+    SELECT * 
     FROM books
     WHERE book_id = $1;`;
   let values = [
-    request.params.book_id
+    request.params.id
   ]
   client.query(SQL, values)
-    .then(result => response.send(result.row))
+    .then(result => response.send(result.rows))
     .catch(console.error);
 });
 
